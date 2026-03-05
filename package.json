@@ -1,0 +1,19 @@
+{
+  "name": "learning-bullmq",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "bullmq": "^5.70.2",
+    "ioredis": "^5.10.0"
+  }
+}
