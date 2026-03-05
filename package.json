@@ -4,7 +4,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun run src/index.ts"
+    "dev": "bun run src/index.ts",
+    "producer": "bun run src/producer.ts",
+    "worker": "bun run src/worker.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"
@@ -13,7 +15,6 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "bullmq": "^5.70.2",
-    "ioredis": "^5.10.0"
+    "bullmq": "^5.70.2"
   }
 }
