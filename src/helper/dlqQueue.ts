@@ -17,15 +17,16 @@ export async function listDQL() {
   }));
 }
 
-async function requeueDlqJob(dlqJobId: string, resetPayload: WebUrlQueueData) {
+export async function requeueDlqJob(dlqJobId: string) {
   const dlqJob = await webUrlDlqQueue.getJob(dlqJobId);
 
   if (!dlqJob) {
     console.error(`DLQ Job not found: ${dlqJobId}`);
     return;
   }
+  console.log(dlqJob.data.data.url);
 
-  const newJob = await webUrlQueue.add(dlqJob.name, resetPayload, {
+  const newJob = await webUrlQueue.add(dlqJob.name, dlqJob.data.data, {
     jobId: dlqJob.data.originalJobId, // Reuse original job ID for idempotency
   });
   await dlqJob.remove();

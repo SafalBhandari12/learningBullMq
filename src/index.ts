@@ -1,4 +1,4 @@
-import { listDQL } from "./helper/dlqQueue";
+import { listDQL, requeueDlqJob } from "./helper/dlqQueue";
 
 const server = Bun.serve({
   port: 3000,
@@ -9,7 +9,14 @@ const server = Bun.serve({
     },
     "/:dlqJobId": async (req) => {
       const { dlqJobId } = req.params;
-      console.log(dlqJobId);
+      await requeueDlqJob(dlqJobId);
+      return new Response("OK", { status: 200 });
+    },
+    "/dequeue-all": async () => {
+      const jobs = await listDQL();
+      for (const job of jobs) {
+        await requeueDlqJob(job.dlqJobId!);
+      }
       return new Response("OK", { status: 200 });
     },
   },
