@@ -1,5 +1,6 @@
 import { Worker } from "bullmq";
 import { connection } from "./redis";
+import "./event"; // Import event listeners
 
 const worker = new Worker(
   "webUrl",
