@@ -1,4 +1,4 @@
-import { dlqQueue, webUrlEventQueue, webUrlQueue } from "./queue";
+import { webUrlDlqQueue, webUrlEventQueue, webUrlQueue } from "./queue";
 
 webUrlEventQueue.on("failed", async ({ jobId, failedReason }) => {
   const job = await webUrlQueue.getJob(jobId);
@@ -13,8 +13,8 @@ webUrlEventQueue.on("failed", async ({ jobId, failedReason }) => {
   if (attemptsMade < maxAttempts) {
     return;
   }
-  console.log("moving from event jobUrlQueue to dlqQueue");
-  await dlqQueue.add(job.name, {
+  console.log("Moving job from webUrlQueue to DLQ");
+  await webUrlDlqQueue.add(job.name, {
     originalJobId: job.id,
     originalQueue: job.queueName,
     data: job.data,

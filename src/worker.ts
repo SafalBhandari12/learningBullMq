@@ -1,8 +1,8 @@
 import { Worker } from "bullmq";
-import { connection } from "./redis";
+import { redisConnection } from "./redis";
 import "./event"; // Import event listeners
 
-const worker = new Worker(
+const urlFetchWorker = new Worker(
   "webUrl",
   async (job) => {
     console.log(`[attempt ${job.attemptsMade + 1}] Processing job ${job.id}`);
@@ -12,12 +12,12 @@ const worker = new Worker(
     }
     console.log(`Job ${job.id} processed successfully!`);
   },
-  { connection: connection, concurrency: 5 },
+  { connection: redisConnection, concurrency: 5 },
 );
-worker.on("completed", (job) => {
+urlFetchWorker.on("completed", (job) => {
   console.log(`Job ${job.id} completed`);
 });
-worker.on("failed", (job, err) => {
+urlFetchWorker.on("failed", (job, err) => {
   console.warn(
     `Job ${job?.id} failed (attempt ${job?.attemptsMade}): ${err.message}`,
   );

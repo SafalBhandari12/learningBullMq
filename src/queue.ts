@@ -1,22 +1,25 @@
 import { Queue, QueueEvents } from "bullmq";
-import { connection } from "./redis";
+import { redisConnection } from "./redis";
+
+
+const webUrlQueueConfig = {
+  attempts: 2,
+  backoff: { type: "exponential", delay: 1000 },
+  removeOnComplete: { age: 24 * 60 * 60, limit: 1000 },
+  removeOnFail: false,
+};
 
 export const webUrlQueue = new Queue("webUrl", {
-  connection,
-  defaultJobOptions: {
-    attempts: 2,
-    backoff: { type: "exponential", delay: 1000 },
-    removeOnComplete: { age: 24 * 60 * 60, limit: 1000 },
-    removeOnFail: false,
-  },
+  connection: redisConnection,
+  defaultJobOptions: webUrlQueueConfig,
 });
 
 export const webUrlEventQueue = new QueueEvents("webUrl", {
-  connection,
+  connection: redisConnection,
 });
 
-export const dlqQueue = new Queue("webUrlDLQ", {
-  connection,
+export const webUrlDlqQueue = new Queue("webUrlDLQ", {
+  connection: redisConnection,
   defaultJobOptions: {
     attempts: 1,
     removeOnComplete: false,
