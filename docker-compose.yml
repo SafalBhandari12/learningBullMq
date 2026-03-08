@@ -1,0 +1,19 @@
+# Production compose — Redis & Postgres are external.
+# Set REDIS_URL and DATABASE_URL in the VPS environment before running.
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - REDIS_URL
+      - DATABASE_URL
+
+  worker:
+    build: .
+    restart: unless-stopped
+    environment:
+      - REDIS_URL
+      - DATABASE_URL
+    command: ["bun", "run", "dist/worker.js"]

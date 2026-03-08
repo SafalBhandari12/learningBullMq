@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "bun run src/index.ts",
     "producer": "bun run src/producer.ts",
-    "worker": "bun run src/worker.ts"
+    "worker": "bun run src/worker.ts",
+    "build": "bun build src/index.ts src/worker.ts --outdir=dist --target=bun --minify",
+    "start": "bun run dist/index.js"
   },
   "devDependencies": {
     "@types/bun": "latest"
